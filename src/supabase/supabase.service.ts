@@ -12,13 +12,29 @@ export class SupabaseService {
     this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   }
 
-  async getLogs(tableName: string): Promise<any> {
-    const { data, error } = await this.supabase.from(tableName).select('*');
-
-    if (error) {
+  async getLogs(): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('issue')
+        .select('*, machine_part (name, address)');
+      if (!error) return data;
+    } catch (error) {
+      console.error('error', error);
       throw error;
     }
+  }
 
-    return data;
+  async getActiveIssues(): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('issue')
+        .select('*, machine_part (name, address)')
+        .or('status.eq.PENDING,status.eq.IN_PROGRESS');
+
+      if (!error) return data;
+    } catch (error) {
+      console.error('error', error);
+      throw error;
+    }
   }
 }

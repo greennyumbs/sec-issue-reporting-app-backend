@@ -1,13 +1,27 @@
 import { IsInt, IsString, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateIssueDto {
-    @IsInt()
-    machine_id: number;
+  @IsInt()
+  @ApiProperty({
+    example: 1,
+    description: 'The ID of the machine',
+  })
+  machine_id: number;
 
-    @IsString()
-    issue_detail: string;
+  @IsString()
+  @ApiProperty({
+    example: 'The machine is overheating',
+    description: 'Details of the issue',
+  })
+  issue_detail: string;
 
-    @IsString()
-    @IsOptional()
-    status?: string = 'PEDNING';
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({
+    example: 'PENDING',
+    description: 'Status of the issue',
+    default: 'PENDING',
+  })
+  status?: string = 'PENDING';
 }
