@@ -1,18 +1,21 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { EmployeeModule } from './employee/employee.module';
 import { SupabaseService } from './supabase/supabase.service';
 import { ConfigModule } from '@nestjs/config';
 import { TechnicianModule } from './technician/technician.module';
+import { EmployeeModule } from './employee/employee.module';
 import config from '../config/config';
 
 @Module({
-  imports: [EmployeeModule, ConfigModule.forRoot({
-    load: [config],
-    isGlobal: true,
-  }), TechnicianModule],
+  imports: [
+    ConfigModule.forRoot({
+      load: [config],
+      isGlobal: true,
+    }),
+    TechnicianModule,
+    EmployeeModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, SupabaseService],
+  providers: [SupabaseService],
 })
 export class AppModule {}

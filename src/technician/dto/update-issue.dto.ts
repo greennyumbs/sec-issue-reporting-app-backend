@@ -23,4 +23,11 @@ export class UpdateIssueStatusDto {
       'Status of the issue (PENDING, IN_PROGRESS, COMPLETED, CANCELLED)',
   })
   status: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'Fixed the machine',
+    description: 'Details of the work done',
+  })
+  techDetail: string;
 }
