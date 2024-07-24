@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { SupabaseService } from './supabase/supabase.service';
 
-@Controller('api')
+@Controller()
 export class AppController {
   constructor(private readonly supabaseService: SupabaseService) {}
 
