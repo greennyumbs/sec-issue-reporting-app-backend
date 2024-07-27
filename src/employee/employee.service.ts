@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-employee.dto';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
@@ -15,23 +15,35 @@ export class EmployeeService {
 
   async createIssue(createIssueDto: CreateIssueDto) {
     try {
-      await this.supabase.from('issue').insert([
+      const { error } = await this.supabase.from('issue').insert([
         {
           machine_id: createIssueDto.machine_id,
           issue_detail: createIssueDto.issue_detail,
         },
       ]);
+
+      if (error) {
+        throw new HttpException(
+          {
+            message: 'Issue creation failed!',
+            error: error,
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
       return {
         message: 'Issue created successfully!',
         httpStatus: 'successful',
       };
     } catch (error) {
-      console.log('error', error);
-      return {
-        message: 'Issue creation failed!',
-        httpStatus: 'failed',
-        error: error,
-      };
+      throw new HttpException(
+        {
+          message: 'Issue creation failed!',
+          error: error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 }
