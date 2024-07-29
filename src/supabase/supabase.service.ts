@@ -16,7 +16,8 @@ export class SupabaseService {
     try {
       const { data, error } = await this.supabase
         .from('issue')
-        .select('*, machine_part (name, address)');
+        .select('*, machine_part (name, address)')
+        .order('updated_at', { ascending: false });
       if (!error) return data;
     } catch (error) {
       console.error('error', error);

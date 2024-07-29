@@ -22,6 +22,24 @@ export class TechnicianService {
     this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   }
 
+  public async findAll(): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('technician')
+        .select('technician_id, tech_name');
+
+      if (error) {
+        console.error('Fetch Error:', error);
+        throw new InternalServerErrorException('Technician fetching failed!');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Unexpected Error:', error);
+      throw new InternalServerErrorException('Technician fetching failed!');
+    }
+  }
+
   public async assignTechnician(
     assignTechnicianDto: AssignTechnicianDto,
   ): Promise<any> {
