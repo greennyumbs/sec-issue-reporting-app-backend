@@ -16,7 +16,7 @@ export class SupabaseService {
     try {
       const { data, error } = await this.supabase
         .from('issue')
-        .select('*, machine_part (name, address)')
+        .select('*, machine_part (name, address), technician (tech_name)')
         .order('updated_at', { ascending: false });
       if (!error) return data;
     } catch (error) {
@@ -29,7 +29,7 @@ export class SupabaseService {
     try {
       const { data, error } = await this.supabase
         .from('issue')
-        .select('*, machine_part (name, address)')
+        .select('*, machine_part (name, address), technician (tech_name)')
         .or('status.eq.PENDING,status.eq.IN_PROGRESS');
 
       if (!error) return data;
