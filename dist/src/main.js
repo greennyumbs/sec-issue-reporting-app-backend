@@ -9,7 +9,7 @@ async function bootstrap() {
         origin: [
             'http://localhost:3000',
             'http://localhost:3001',
-            'https://sec-issue-reporting-app-frontend.vercel.app',
+            'https://sec-issue-reporting-app-frontend-rho.vercel.app',
         ],
     });
     const config = new swagger_1.DocumentBuilder()
