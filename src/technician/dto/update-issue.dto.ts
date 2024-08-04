@@ -8,7 +8,7 @@ export class UpdateIssueStatusDto {
     example: 1,
     description: 'The ID of the machine',
   })
-  id: number;
+  issueId: number;
 
   @IsString()
   @IsIn([

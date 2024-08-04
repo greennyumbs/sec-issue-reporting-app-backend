@@ -80,13 +80,64 @@ export class TechnicianService {
     }
   }
 
+  // public async updateStatus(
+  //   updateIssueStatusDto: UpdateIssueStatusDto,
+  // ): Promise<any> {
+  //   const { id, status, techDetail } = updateIssueStatusDto;
+
+  //   try {
+  //     const issue = await this.findIssueById(id);
+
+  //     if (issue.status === status) {
+  //       return {
+  //         message: 'Cannot update to the same status!',
+  //         httpStatus: 'failed',
+  //       };
+  //     }
+
+  //     const now = new Date();
+  //     const utc7Offset = 7 * 60;
+  //     const localTime = new Date(now.getTime() + utc7Offset * 60 * 1000);
+
+  //     const { error: updateError } = await this.supabase
+  //       .from('issue')
+  //       .update({
+  //         status: status,
+  //         tech_detail: techDetail,
+  //         updated_at: localTime,
+  //       })
+  //       .eq('issue_id', id);
+
+  //     if (updateError) {
+  //       console.error('Update Error:', updateError);
+  //       throw new InternalServerErrorException('Issue status update failed!');
+  //     }
+
+  //     return {
+  //       message: 'Issue status updated successfully!',
+  //       httpStatus: 'successful',
+  //       data: updateIssueStatusDto,
+  //     };
+  //   } catch (error) {
+  //     console.error('Unexpected Error:', error);
+  //     return {
+  //       message: 'Issue status update failed!',
+  //       httpStatus: 'failed',
+  //       error: error,
+  //     };
+  //   }
+  // }
+
   public async updateStatus(
     updateIssueStatusDto: UpdateIssueStatusDto,
   ): Promise<any> {
-    const { id, status, techDetail } = updateIssueStatusDto;
+    const { issueId, status, techDetail } = updateIssueStatusDto;
+    console.log('Updating issue with ID:', issueId);
+    console.log('New status:', status);
+    console.log('Tech detail:', techDetail);
 
     try {
-      const issue = await this.findIssueById(id);
+      const issue = await this.findIssueById(issueId);
 
       if (issue.status === status) {
         return {
@@ -106,7 +157,7 @@ export class TechnicianService {
           tech_detail: techDetail,
           updated_at: localTime,
         })
-        .eq('issue_id', id);
+        .eq('issue_id', issueId);
 
       if (updateError) {
         console.error('Update Error:', updateError);
@@ -148,8 +199,29 @@ export class TechnicianService {
     }
   }
 
+  // private async findIssueById(id: number): Promise<any> {
+  //   try {
+  //     const { data, error: fetchError } = await this.supabase
+  //       .from('issue')
+  //       .select('*')
+  //       .eq('issue_id', id)
+  //       .single();
+
+  //     if (fetchError) {
+  //       console.error('Fetch Error:', fetchError);
+  //       throw new NotFoundException('Issue not found!');
+  //     }
+  //     console.log('returned data', data);
+  //     return data;
+  //   } catch (error) {
+  //     console.error('Unexpected Error:', error);
+  //     throw new InternalServerErrorException('Issue status finding failed!');
+  //   }
+  // }
+
   private async findIssueById(id: number): Promise<any> {
     try {
+      console.log('Searching for issue with ID:', id);
       const { data, error: fetchError } = await this.supabase
         .from('issue')
         .select('*')
@@ -160,11 +232,12 @@ export class TechnicianService {
         console.error('Fetch Error:', fetchError);
         throw new NotFoundException('Issue not found!');
       }
-      console.log('returned data', data);
+      console.log('Returned data:', data);
       return data;
     } catch (error) {
       console.error('Unexpected Error:', error);
       throw new InternalServerErrorException('Issue status finding failed!');
     }
   }
+
 }
